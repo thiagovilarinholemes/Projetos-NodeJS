@@ -8,6 +8,24 @@ const dbConfig = require("./app/config/db.config");
 /** Cria um app express */
 const app = express();
 
+var corsOptions = {
+  origin: "http://localhost:8081"
+};
+
+var corsOrigem = {origin: 'http://localhost:8080'};
+
+/** Adiciona o cors
+ * deixando vazio o cors 
+ * faz a tradução de qualquer domínio
+ */
+app.use(cors());
+
+// Adiciona o body-parse
+app.use(bodyParser.json());
+
+// Analisa requisições de content-type - application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: true }));
+
 const db = require("./app/models");
 const Role = db.role;
 
@@ -63,23 +81,10 @@ function initial() {
   });
 }
 
-var corsOptions = {
-  origin: "http://localhost:8081"
-};
-
-/** Adiciona o cors */
-app.use(cors(corsOptions));
-
-// Adiciona o body-parse
-app.use(bodyParser.json());
-
-// Analisa requisições de content-type - application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }));
-
 // Rotas
-// app.get("/", (req, res) => {
-//   res.json({ message: "Welcome to bezkoder application." });
-// });
+app.get("/", (req, res) => {
+  res.json({ message: "Welcome to bezkoder application." });
+});
 require("./app/routes/auth.routes")(app);
 require("./app/routes/user.routes")(app);
 
